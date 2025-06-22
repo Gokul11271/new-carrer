@@ -2,32 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>User Image Preview</title>
+  <title>Local Image Gallery</title>
   <style>
-    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
-    img { max-width: 300px; margin-top: 20px; border-radius: 10px; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    input[type="file"] {
+      margin: 20px 0;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+    .gallery img {
+      width: 200px;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
 
-  <h1>Select an Image</h1>
-  <input type="file" id="imageInput" accept="image/*" />
-  <br />
-  <img id="preview" src="#" alt="Image preview will appear here" style="display:none;" />
+  <h1>📷 My Temporary Gallery</h1>
+  <p>Select multiple images to preview them like a mini Google Photos</p>
+
+  <input type="file" id="imageInput" accept="image/*" multiple />
+  
+  <div class="gallery" id="gallery"></div>
 
   <script>
-    const imageInput = document.getElementById('imageInput');
-    const preview = document.getElementById('preview');
+    const input = document.getElementById('imageInput');
+    const gallery = document.getElementById('gallery');
 
-    imageInput.addEventListener('change', function () {
-      const file = this.files[0];
-      if (file) {
+    input.addEventListener('change', function () {
+      gallery.innerHTML = ''; // Clear previous images
+      const files = this.files;
+
+      for (let i = 0; i < files.length; i++) {
         const reader = new FileReader();
         reader.onload = function (e) {
-          preview.src = e.target.result;
-          preview.style.display = 'block';
-        }
-        reader.readAsDataURL(file);
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          gallery.appendChild(img);
+        };
+        reader.readAsDataURL(files[i]);
       }
     });
   </script>
