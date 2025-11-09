@@ -1,272 +1,384 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Snake Adventure 🐍</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Snake Tribute — DR.SHANTHA LAXMI MAM</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    font-family: 'Poppins', sans-serif;
-    overflow: hidden;
-    color: #fff;
+  :root{
+    --bg1:#081225; --bg2:#0b3b4a; --accent:#00e6c9; --accent-dark:#009b82;
+  }
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:#fff;display:flex;align-items:center;justify-content:center;padding:18px;}
+  .stage{
+    width:100%;
+    max-width:420px;
+    display:flex;flex-direction:column;gap:14px;align-items:center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.06);
+    padding:18px;border-radius:14px;backdrop-filter: blur(6px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    position:relative;
   }
 
-  h1 {
-    color: #00ffc6;
-    text-shadow: 0 0 8px #00ffc6;
-    margin-bottom: 10px;
+  h1{margin:0;font-size:1.05rem;color:var(--accent);text-shadow:0 0 10px rgba(0,230,201,0.18);display:flex;align-items:center;gap:10px;}
+  .top-row{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .panel{background:rgba(0,0,0,0.25);padding:8px 12px;border-radius:10px;font-size:0.95rem;border:1px solid rgba(255,255,255,0.03);}
+  #canvas{background:#fff;border-radius:9px;border:4px solid rgba(0,230,201,0.12);touch-action:none;display:block;max-width:100%;}
+  .letters{width:100%;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;font-size:0.95rem;margin-top:6px}
+  .letter-box{min-width:18px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.04);font-weight:600;text-align:center}
+  .controls{margin-top:6px;display:grid;grid-template-columns:64px 64px 64px;gap:8px;align-items:center;justify-content:center}
+  .btn{height:56px;border-radius:10px;border:none;background:linear-gradient(180deg,var(--accent),var(--accent-dark));color:#042; font-weight:700;font-size:18px;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+  .btn:active{transform:translateY(1px) scale(.995)}
+  .hint{font-size:0.86rem;color:rgba(255,255,255,0.7);text-align:center;margin-top:6px}
+  .pop {
+    position:absolute;pointer-events:none;transform:translate(-50%,-100%) scale(.9);
+    background: rgba(255,255,255,0.96); color:#042; padding:8px 12px; border-radius:10px;
+    font-weight:700; box-shadow:0 8px 30px rgba(0,0,0,0.45); z-index:40; opacity:0; transition:all 260ms ease;
   }
-
-  .game-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: rgba(255,255,255,0.1);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  .pop.show{opacity:1;transform:translate(-50%,-120%) scale(1);}
+  .victory {
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:50;
+    background:linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));backdrop-filter: blur(4px);border-radius:14px;opacity:0;pointer-events:none;transition:all 300ms ease;
   }
-
-  #canvas {
-    border: 4px solid #00ffc6;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,255,198,0.6);
-    background: #fff;
-  }
-
-  .stats {
-    display: flex;
-    justify-content: space-between;
-    width: 240px;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 1em;
-    margin-top: 10px;
-  }
-
-  .stats span {
-    color: #00ffc6;
-    font-weight: bold;
-  }
-
-  .controls {
-    margin-top: 15px;
-    display: grid;
-    grid-template-columns: 60px 60px 60px;
-    gap: 10px;
-    justify-content: center;
-  }
-
-  .btn {
-    width: 60px;
-    height: 60px;
-    background: rgba(255,255,255,0.2);
-    border: 2px solid #00ffc6;
-    color: #00ffc6;
-    border-radius: 10px;
-    font-size: 1.5em;
-    font-weight: bold;
-    text-align: center;
-    line-height: 55px;
-    user-select: none;
-    transition: 0.2s;
-  }
-
-  .btn:active {
-    background: #00ffc6;
-    color: #000;
-  }
-
-  .reward {
-    position: absolute;
-    top: 20%;
-    background: rgba(255,255,255,0.95);
-    color: #333;
-    padding: 20px 30px;
-    border-radius: 12px;
-    font-size: 1.2em;
-    box-shadow: 0 5px 30px rgba(0,255,198,0.5);
-    animation: pop 0.6s ease forwards;
-    z-index: 10;
-  }
-
-  @keyframes pop {
-    0% { transform: scale(0); opacity: 0; }
-    60% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(1); }
-  }
-
-  @media (max-width: 600px) {
-    #canvas {
-      width: 250px;
-      height: 250px;
-    }
-    .stats { width: 200px; font-size: 0.9em; }
+  .victory.show{opacity:1;pointer-events:auto}
+  .victory-card{background:#fff;color:#012; padding:18px 22px;border-radius:12px; text-align:center; box-shadow:0 18px 50px rgba(0,0,0,0.6)}
+  .victory-card h2{margin:0;color:var(--accent)}
+  @media (max-width:420px){
+    .controls{grid-template-columns:54px 54px 54px}
+    .btn{height:50px;font-size:16px}
   }
 </style>
 </head>
 <body>
-  <h1>🐍 Snake Adventure</h1>
-  <div class="game-container">
-    <canvas id="canvas" width="300" height="300"></canvas>
-    <div class="stats">
-      <p>Score: <span id="points">0</span></p>
-      <p>Best: <span id="record">0</span></p>
+  <div class="stage" id="stage">
+    <div class="top-row">
+      <h1>🐍 Snake Tribute — DR.SHANTHA LAXMI MAM</h1>
+      <div class="panel" id="scorePanel">Score: <strong id="score">0</strong></div>
     </div>
-    <div class="controls">
-      <div></div>
-      <div class="btn" id="up">⬆️</div>
-      <div></div>
-      <div class="btn" id="left">⬅️</div>
-      <div class="btn" id="down">⬇️</div>
-      <div class="btn" id="right">➡️</div>
+
+    <canvas id="canvas" width="320" height="320"></canvas>
+
+    <div class="letters" id="letters" aria-live="polite"></div>
+
+    <div class="controls" style="margin-top:10px">
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+        <button class="btn" id="upBtn">⬆</button>
+        <div style="height:8px"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+        <button class="btn" id="leftBtn">⬅</button>
+        <button class="btn" id="downBtn">⬇</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+        <button class="btn" id="rightBtn">➡</button>
+        <div style="height:8px"></div>
+      </div>
+    </div>
+
+    <div class="hint">Use on-screen buttons or arrow keys / swipe to play. Eat names in fixed order (left → right) until final reveal.</div>
+
+    <!--floating popup that will be moved near head-->
+    <div id="pop" class="pop"></div>
+
+    <div id="victory" class="victory" aria-hidden="true">
+      <div class="victory-card">
+        <h2>🎉 You Revealed:</h2>
+        <p id="fullName" style="font-size:1.15rem;margin:12px 0;font-weight:800"></p>
+        <button class="btn" id="restartBtn" style="margin-top:6px">Play Again</button>
+      </div>
     </div>
   </div>
 
-  <script>
-    window.onload = () => {
-      const canvas = document.getElementById("canvas"),
-        ctx = canvas.getContext("2d"),
-        cw = canvas.width,
-        s = cw / 20;
+<script>
+/* -------------------------
+   Game configuration
+   ------------------------- */
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const grid = 16;               // grid size in pixels (box size)
+const cols = canvas.width / grid;
+const rows = canvas.height / grid;
 
-      let x = 0, y = 0,
-          direction = { dir: "right", change: true },
-          tail = [],
-          food = { x, y },
-          speed = 120,
-          points = 0,
-          record = localStorage.getItem("record") || 0,
-          foods = ["🍎", "🍒", "🍋", "🍉", "🍇", "🥝", "🍓", "🍍"];
+const names = [
+ "Ashwin","Bhavadharani","Blessy","Devajeevan","Dhakshayani","Dhanusri","Deepika","Divya","Gokula ramanan",
+ "Janani","Kaaviya","Kanishka","Kandhasamy","Kaviya Sri","Keerthana","Kishore","Lavanya","Madhu","Mirudhu",
+ "Naga Gowtham","Rohit","Sivanya","Sivaram","Varun","Vignesh.B","Vinitha 56","Yogesh","Sri kaviya","Sudharshan",
+ "Vignesh.S","Gokul","Sathish Kumar"
+]; // EXACT ascending order as provided; length = 33
 
-      document.getElementById("record").textContent = record;
+const targetName = "DR.SHANTHA LAXMI MAM";
+const totalTargets = names.length; // 33 targets in sequence
 
-      const eatSound = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_0e9e9f2762.mp3?filename=click-124467.mp3");
-      const moveSound = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_3fa4cb51d3.mp3?filename=pop-124476.mp3");
+/* -------------------------
+   Game state
+   ------------------------- */
+let snake = [{x: Math.floor(cols/2)*grid, y: Math.floor(rows/2)*grid}];
+let dir = {x:1, y:0}; // right
+let nextDir = {...dir};
+let score = 0;
+let sequenceIndex = 0;     // next target index in names[]
+let food = null;
+let running = true;
+let gameInterval = null;
 
-      createFood();
-      draw();
+/* UI elements */
+const scoreEl = document.getElementById('score');
+const lettersEl = document.getElementById('letters');
+const popEl = document.getElementById('pop');
+const victoryEl = document.getElementById('victory');
+const fullNameEl = document.getElementById('fullName');
 
-      document.addEventListener("keydown", e => getDirection(e));
-      document.getElementById("up").onclick = () => changeDir("top");
-      document.getElementById("down").onclick = () => changeDir("bottom");
-      document.getElementById("left").onclick = () => changeDir("left");
-      document.getElementById("right").onclick = () => changeDir("right");
+/* prepare revealed array (initially underscores and spaces preserved) */
+const revealed = Array.from(targetName).map(ch => ch === ' ' ? ' ' : '_');
+renderLetters();
 
-      function showReward(text) {
-        const reward = document.createElement("div");
-        reward.classList.add("reward");
-        reward.textContent = text;
-        document.body.appendChild(reward);
-        setTimeout(() => reward.remove(), 1500);
-      }
+/* sounds */
+const eatSound = new Audio("https://cdn.pixabay.com/download/audio/2021/08/04/audio_7a7b57e2f6.mp3?filename=coin-07.mp3");
+eatSound.volume = 0.35;
 
-      function cutTail() {
-        alert("💀 Game Over!");
-        tail = [];
-        points = 0;
-        document.getElementById("points").textContent = points;
-      }
+/* helper: speak loudly (Web Speech API) */
+function speakLoud(text){
+  if(!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.volume = 1.0; u.rate = 0.95; u.pitch = 1.0;
+  window.speechSynthesis.cancel(); // stop previous
+  window.speechSynthesis.speak(u);
+}
 
-      function createFood(caught = false) {
-        let xf = Math.floor(Math.random() * (cw / s)) * s;
-        let yf = Math.floor(Math.random() * (cw / s)) * s;
+/* -------------------------
+   Utility: find empty cell (not occupied by snake)
+   ------------------------- */
+function getEmptyCells(){
+  const occupied = new Set(snake.map(s=>`${s.x},${s.y}`));
+  const cells = [];
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const X = c*grid, Y = r*grid;
+      if(!occupied.has(`${X},${Y}`)) cells.push({x:X,y:Y});
+    }
+  }
+  return cells;
+}
 
-        for (let i = 0; i < tail.length; i++) {
-          if (xf === tail[i].x && yf === tail[i].y) return createFood();
-        }
+/* spawn food at random empty cell, but take name from sequence order (fixed) */
+function spawnFood(){
+  const empty = getEmptyCells();
+  if(empty.length===0) return null;
+  // choose random available position so it doesn't always appear same place
+  const pos = empty[Math.floor(Math.random()*empty.length)];
+  const name = names[sequenceIndex]; // fixed ascending order
+  food = {x: pos.x, y: pos.y, name: name, seq: sequenceIndex};
+}
 
-        food = { x: xf, y: yf, emoji: foods[Math.floor(Math.random() * foods.length)] };
+/* -------------------------
+   Drawing
+   ------------------------- */
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // background grid subtle
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
 
-        if (caught) {
-          points++;
-          eatSound.play();
-          document.getElementById("points").textContent = points;
-          if (record < points) {
-            record = points;
-            localStorage.setItem("record", record);
-            document.getElementById("record").textContent = record;
-          }
+  // draw food box
+  if(food){
+    ctx.fillStyle = '#ffdd57';
+    ctx.fillRect(food.x, food.y, grid, grid);
+    // name label (small)
+    ctx.fillStyle = '#0b2b2a';
+    ctx.font = '10px Inter, Arial';
+    ctx.fillText(food.name.length>10?food.name.slice(0,10)+'…':food.name, food.x+2, food.y+grid-4);
+  }
+  // draw snake
+  for(let i=snake.length-1;i>=0;i--){
+    const s = snake[i];
+    ctx.fillStyle = (i===0) ? '#00e6c9' : '#00b39a';
+    ctx.fillRect(s.x, s.y, grid, grid);
+    // small gap to look nicer
+    ctx.clearRect(s.x+2, s.y+2, grid-4, grid-4);
+  }
+}
 
-          if (points === 10) showReward("🎁 You unlocked Level 2!");
-          if (points === 20) showReward("🔥 Super Speed Unlocked!");
-          if (points === 50) showReward("👑 Master Snake!");
-        }
-      }
+/* -------------------------
+   Game loop & logic
+   ------------------------- */
+function step(){
+  if(!running) return;
 
-      function getDirection(e) {
-        switch (e.keyCode) {
-          case 37: changeDir("left"); break;
-          case 38: changeDir("top"); break;
-          case 39: changeDir("right"); break;
-          case 40: changeDir("bottom"); break;
-        }
-      }
+  // update direction (prevent reversing)
+  if((nextDir.x === -dir.x && nextDir.y === -dir.y)) {
+    // ignore reverse
+  } else dir = {...nextDir};
 
-      function changeDir(dir) {
-        if (
-          (dir === "left" && direction.dir !== "right") ||
-          (dir === "right" && direction.dir !== "left") ||
-          (dir === "top" && direction.dir !== "bottom") ||
-          (dir === "bottom" && direction.dir !== "top")
-        ) {
-          direction = { dir, change: false };
-          moveSound.play();
-        }
-      }
+  const head = {x: snake[0].x + dir.x*grid, y: snake[0].y + dir.y*grid};
 
-      function setDirection() {
-        switch (direction.dir) {
-          case "left": x -= s; break;
-          case "top": y -= s; break;
-          case "right": x += s; break;
-          case "bottom": y += s; break;
-        }
+  // wrap-around off. Keep wrap so it doesn't instant-death on edge (user earlier wanted smoother)
+  if(head.x < 0) head.x = (cols-1)*grid;
+  if(head.x >= canvas.width) head.x = 0;
+  if(head.y < 0) head.y = (rows-1)*grid;
+  if(head.y >= canvas.height) head.y = 0;
 
-        if (x >= cw) x = 0;
-        if (x < 0) x = cw - s;
-        if (y >= cw) y = 0;
-        if (y < 0) y = cw - s;
-      }
+  // self-collision check
+  for(let i=0;i<snake.length;i++){
+    if(head.x === snake[i].x && head.y === snake[i].y){
+      // game over only if collided with body (we allow wrap). Reset game
+      endGame(false);
+      return;
+    }
+  }
 
-      function draw() {
-        setInterval(() => {
-          setDirection();
-          ctx.fillStyle = "#fff";
-          ctx.fillRect(0, 0, cw, cw);
+  // add new head
+  snake.unshift(head);
 
-          // Draw tail
-          if (tail.length > 0) {
-            for (let i = 1; i < tail.length; i++) {
-              tail[i - 1] = tail[i];
-              ctx.fillStyle = "#00bcd4";
-              ctx.fillRect(tail[i].x + 2, tail[i].y + 2, s - 4, s - 4);
-              if (tail[i].x === x && tail[i].y === y) cutTail();
-            }
-            tail[tail.length - 1] = { x, y };
-          }
+  // eating target?
+  if(food && head.x === food.x && head.y === food.y && food.seq === sequenceIndex){
+    // eat!
+    score++;
+    sequenceIndex++;
+    scoreEl.textContent = score;
+    // play eat sound and loud spoken name
+    try{ eatSound.currentTime=0; eatSound.play(); }catch(e){}
+    speakLoud(food.name);
 
-          // Draw food emoji
-          ctx.font = `${s}px Arial`;
-          ctx.fillText(food.emoji, food.x + 2, food.y + s - 4);
+    // show popup near head
+    showPop(food.name, head.x + grid/2, head.y + grid/2);
 
-          // Draw head
-          ctx.fillStyle = "#008793";
-          ctx.fillRect(x, y, s, s);
+    // update revealed letters proportionally:
+    // revealCount = floor( eaten/totalTargets * name_length )
+    const revealCount = Math.floor((sequenceIndex / totalTargets) * targetName.length);
+    for(let i=0;i<revealCount;i++){
+      revealed[i] = targetName[i];
+    }
+    renderLetters();
 
-          if (x === food.x && y === food.y) createFood(true);
-          direction.change = true;
-        }, speed);
-      }
-    };
-  </script>
+    // if eaten all targets -> victory: reveal full name and end
+    if(sequenceIndex >= totalTargets){
+      // ensure full reveal
+      for(let i=0;i<targetName.length;i++) revealed[i] = targetName[i];
+      renderLetters();
+      endGame(true);
+      return;
+    } else {
+      // spawn next food
+      spawnFood();
+      // (do not pop tail so snake grows by 1)
+    }
+  } else {
+    // normal move: remove tail cell => length unchanged
+    snake.pop();
+  }
+
+  draw();
+}
+
+/* -------------------------
+   Popup near head
+   ------------------------- */
+function showPop(text, centerX, centerY){
+  popEl.textContent = text;
+  const stageRect = document.getElementById('stage').getBoundingClientRect();
+  // compute position relative to stage
+  popEl.style.left = (stageRect.left + centerX) + 'px';
+  popEl.style.top  = (stageRect.top + centerY) + 'px';
+  popEl.classList.add('show');
+  // adjust to be visible slightly above head
+  // hide after short time
+  setTimeout(()=>popEl.classList.remove('show'), 900);
+}
+
+/* -------------------------
+   End game / Victory
+   ------------------------- */
+function endGame(victory){
+  running = false;
+  clearInterval(gameInterval);
+  if(victory){
+    // show full name card
+    fullNameEl.textContent = targetName;
+    document.getElementById('victory').classList.add('show');
+    // nice speak
+    speakLoud('Congratulations! You revealed ' + targetName);
+  } else {
+    // regular death: show message and allow restart
+    setTimeout(()=> {
+      alert('Game Over — you hit yourself. Try again!');
+      resetGame();
+    }, 50);
+  }
+}
+
+/* -------------------------
+   Letters render
+   ------------------------- */
+function renderLetters(){
+  lettersEl.innerHTML = '';
+  revealed.forEach(ch => {
+    const div = document.createElement('div');
+    div.className = 'letter-box';
+    div.textContent = ch === ' ' ? ' ' : ch;
+    lettersEl.appendChild(div);
+  });
+}
+
+/* -------------------------
+   Controls: keyboard + buttons + swipe
+   ------------------------- */
+document.addEventListener('keydown', e=>{
+  if(e.key === 'ArrowUp') nextDir = {x:0,y:-1};
+  if(e.key === 'ArrowDown') nextDir = {x:0,y:1};
+  if(e.key === 'ArrowLeft') nextDir = {x:-1,y:0};
+  if(e.key === 'ArrowRight') nextDir = {x:1,y:0};
+});
+document.getElementById('upBtn').addEventListener('click', ()=> nextDir={x:0,y:-1});
+document.getElementById('downBtn').addEventListener('click', ()=> nextDir={x:0,y:1});
+document.getElementById('leftBtn').addEventListener('click', ()=> nextDir={x:-1,y:0});
+document.getElementById('rightBtn').addEventListener('click', ()=> nextDir={x:1,y:0});
+
+/* basic touch swipe for mobile */
+let startX=0,startY=0;
+canvas.addEventListener('touchstart',e=>{
+  const t = e.touches[0];
+  startX = t.clientX; startY = t.clientY;
+});
+canvas.addEventListener('touchend',e=>{
+  const t = e.changedTouches[0];
+  const dx = t.clientX - startX;
+  const dy = t.clientY - startY;
+  if(Math.abs(dx) > Math.abs(dy)){
+    if(dx > 20) nextDir = {x:1,y:0};
+    else if(dx < -20) nextDir = {x:-1,y:0};
+  } else {
+    if(dy > 20) nextDir = {x:0,y:1};
+    else if(dy < -20) nextDir = {x:0,y:-1};
+  }
+});
+
+/* restart */
+document.getElementById('restartBtn').addEventListener('click', ()=>{
+  document.getElementById('victory').classList.remove('show');
+  resetGame();
+});
+
+/* reset state and start */
+function resetGame(){
+  snake = [{x: Math.floor(cols/2)*grid, y: Math.floor(rows/2)*grid}];
+  dir = {x:1,y:0}; nextDir = {...dir};
+  score = 0; sequenceIndex = 0; running = true;
+  scoreEl.textContent = '0';
+  // reset revealed
+  for(let i=0;i<revealed.length;i++) revealed[i] = (targetName[i]===' ')?' ':'_';
+  renderLetters();
+  spawnFood();
+  clearInterval(gameInterval);
+  gameInterval = setInterval(step, 140);
+}
+
+/* initial spawn & start */
+spawnFood();
+gameInterval = setInterval(step, 140);
+
+/* ensure interval cleared on unload */
+window.addEventListener('beforeunload', ()=> clearInterval(gameInterval));
+</script>
 </body>
 </html>
+
