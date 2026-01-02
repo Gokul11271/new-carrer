@@ -3,244 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leadership | Ecog Natural Products</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Sustainability | EcoG Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
-        :root {
-            --bg-dark: #0a0a0a;
-            --bg-card: #161616;
-            --ecog-green: #7ca344;
-            --tata-blue: #005a9c;
-            --tata-gold: #b4925a;
-            --linkedin-blue: #0077b5;
-            --text-muted: rgba(255, 255, 255, 0.7);
-            --transition-smooth: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-dark); 
-            color: #ffffff; 
-            line-height: 1.6; 
-            overflow-x: hidden; 
-        }
-
-        /* --- Updated Header Styles (Seamless Blend) --- */
+        /* --- HEADER --- */
         header {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 24px 48px;
+            top: 0; left: 0; width: 100%;
+            padding: 16px 48px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             z-index: 1000;
-            /* Removed glassy effect and background */
-            background: transparent; 
-            backdrop-filter: none;
-            transition: background 0.4s ease, padding 0.4s ease;
+            transition: background 0.4s ease;
         }
-
-        /* Class added via JS on scroll to maintain readability on white sections */
         header.scrolled {
-            background: var(--bg-dark);
-            padding: 14px 48px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
-
-        .logo img {
-            width: 120px;
-            height: auto;
+        header.scrolled .main-menu a, 
+        header.scrolled .header-actions i, 
+        header.scrolled .auth-links a {
+            mix-blend-mode: normal;
+            color: #1a1a1a;
         }
-
+        .logo img { width: 120px; height: auto; }
         .main-menu a {
+            margin: 0 15px;
             text-decoration: none;
             color: white;
-            margin: 0 15px;
             font-size: 0.9rem;
-            font-weight: 400;
-            font-family: 'Montserrat', sans-serif;
-            transition: color 0.3s ease;
+            font-weight: 500;
+            mix-blend-mode: difference;
         }
-
-        .main-menu a:hover { color: var(--ecog-green); }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            color: white;
-        }
-
+        .header-actions { display: flex; align-items: center; gap: 24px; }
         .header-actions i {
             font-size: 1.05rem;
             cursor: pointer;
             transition: transform .3s ease;
+            mix-blend-mode: difference;
+            color: white;
         }
-
         .header-actions i:hover { transform: scale(1.15); }
-
         .auth-links a {
             text-decoration: none;
             color: white;
             font-size: 0.9rem;
             margin-left: 14px;
-            font-family: 'Montserrat', sans-serif;
+            mix-blend-mode: difference;
         }
 
-        .search-input {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid white;
-            color: white;
-            width: 0;
-            transition: width 0.4s;
-            padding: 0;
-        }
-
-        .search-wrapper:hover .search-input {
-            width: 100px;
-            padding-left: 10px;
-        }
-
-        /* --- Hero Section --- */
-        .hero-banner {
-            height: 70vh; /* Increased height for better blend */
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.9)), 
-                        url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1500');
-            background-size: cover; 
+        /* --- NEW HERO SECTION (IMAGE STYLE) --- */
+        .hero-section {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
             background-position: center;
-            display: flex; 
-            align-items: center; 
-            padding: 0 5%;
+            display: flex;
+            align-items: center;
+            padding-left: 8%;
+            color: white;
+            position: relative;
         }
-
-        /* Rest of your styles remain the same... */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+        .tag-box {
+            background: #004b7a;
+            color: white;
+            padding: 4px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
         }
-
-        .hero-inner { max-width: 1200px; width: 100%; margin: 0 auto; }
-        .hero-badge { background: var(--tata-blue); color: white; padding: 6px 14px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: inline-block; }
-        .hero-banner h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; line-height: 1.1; margin-bottom: 25px; letter-spacing: -2px; }
-        .hero-description { border-left: 2px solid var(--tata-gold); padding-left: 25px; max-width: 500px; }
-        .hero-description p { color: rgba(255,255,255,0.8); font-size: 1.1rem; font-weight: 300; }
-
-        .ceo-section { padding: 80px 0; background: #000; }
-        .ceo-container { max-width: 1200px; margin: 0 auto; position: relative; display: flex; align-items: center; padding: 0 20px; }
-        .ceo-image-wrapper { width: 100%; height: 600px; overflow: hidden; border-radius: 4px; }
-        .ceo-portrait { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85); transition: var(--transition-smooth); }
-        
-        .ceo-info-card {
-            position: absolute; right: 40px; bottom: 60px; width: 45%;
-            background: rgba(26, 26, 26, 0.95); padding: 50px;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            animation: fadeInUp 1s ease;
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 30px;
         }
-        .ceo-name { font-size: 3rem; margin-bottom: 15px; font-weight: 700; letter-spacing: -1px; }
-        .ceo-details { border-left: 3px solid var(--tata-gold); padding-left: 30px; }
-        .ceo-bio-preview { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 30px; }
-        .ceo-full-profile-btn { color: var(--tata-gold); text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 2px; display: inline-flex; align-items: center; cursor: pointer; transition: 0.3s; }
-        .ceo-full-profile-btn span { margin-left: 10px; transition: 0.3s; }
-        .ceo-full-profile-btn:hover { color: #fff; }
-
-        .grid-section { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
-        .section-header { margin-bottom: 60px; border-left: 4px solid var(--ecog-green); padding-left: 20px; }
-        .section-header span { text-transform: uppercase; font-size: 0.7rem; color: var(--ecog-green); letter-spacing: 3px; font-weight: 700; }
-        .section-header h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-top: 5px; }
-
-        .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .member-card { background: var(--bg-card); overflow: hidden; transition: var(--transition-smooth); cursor: pointer; border: 1px solid #1a1a1a; }
-        .member-card:hover { transform: translateY(-15px); border-color: var(--ecog-green); box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
-        
-        .img-container { width: 100%; height: 350px; overflow: hidden; }
-        .member-image { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: var(--transition-smooth); transform: scale(1.1); }
-        .member-card:hover .member-image { filter: grayscale(0%); transform: scale(1); }
-        .member-info { padding: 25px; }
-        .member-info h4 { font-size: 1.2rem; margin-bottom: 5px; }
-        .member-info p { font-size: 0.8rem; color: var(--tata-gold); text-transform: uppercase; font-weight: 600; }
-
-        .profile-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-dark); z-index: 9999; display: none;
-            overflow-y: auto; opacity: 0; transition: opacity 0.5s ease;
+        .hero-desc-wrapper {
+            border-left: 2px solid #b38e5d; /* Gold border like the image */
+            padding-left: 25px;
+            max-width: 500px;
         }
-        .profile-overlay.active { display: block; opacity: 1; }
-        .profile-container { max-width: 1100px; margin: 80px auto; padding: 0 40px; transform: translateY(40px); transition: transform 0.5s ease; }
-        
-        /* --- Footer Styles --- */
-        .footer {
-            background: #ffffff;
-            color: #334155;
-            font-family: "Inter", sans-serif;
-            border-top: 1px solid #e5e7eb;
+        .hero-desc {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            font-weight: 400;
+            color: #efefef;
         }
-
-        .footer-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 70px 6% 30px;
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            right: 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            animation: bounce 2s infinite;
         }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
 
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1.6fr repeat(3, 1fr);
-            gap: 48px;
-        }
-
-        .footer-brand .logo-wrap img { width: 120px; margin-bottom: 20px; }
+        /* --- FOOTER --- */
+        .footer { background: #ffffff; color: #334155; font-family: "Inter", sans-serif; border-top: 1px solid #e5e7eb; }
+        .footer-container { max-width: 1280px; margin: 0 auto; padding: 70px 6% 30px; }
+        .footer-grid { display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: 48px; }
         .footer-brand p { font-size: 0.95rem; line-height: 1.6; color: #475569; }
+        .footer-brand img { width: 140px; margin-bottom: 20px; }
         .footer h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 16px; color: #0f172a; }
         .footer ul { list-style: none; padding: 0; }
         .footer li { margin-bottom: 10px; }
-        .footer a {
-            color: #475569; font-size: 0.9rem; text-decoration: none;
-            transition: color 0.2s ease;
-        }
-        .footer a:hover { color: #0f172a; }
-
+        .footer a { color: #475569; font-size: 0.9rem; text-decoration: none; transition: all 0.2s ease; }
+        .footer a:hover { color: #0f172a; border-bottom: 1px solid #cbd5e1; }
         .footer-social { display: flex; gap: 14px; margin-top: 18px; }
-        .footer-social a {
-            width: 38px; height: 38px; border-radius: 50%;
-            border: 1px solid #e5e7eb; display: flex;
-            align-items: center; justify-content: center;
-            color: #475569;
-        }
+        .footer-social a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; color: #475569; transition: all 0.2s ease; }
+        .footer-social a:hover { background: #f8fafc; color: #098b64; border-color: #098b64; }
+        .footer-bottom { border-top: 1px solid #e5e7eb; margin-top: 45px; padding-top: 20px; display: flex; justify-content: space-between; font-size: 0.8rem; color: #64748b; }
 
-        .footer-bottom {
-            border-top: 1px solid #e5e7eb;
-            margin-top: 45px;
-            padding-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: #64748b;
-        }
-
-        @media (max-width: 992px) {
-            header { padding: 16px 24px; }
-            .main-menu { display: none; }
-            .ceo-info-card { width: 90%; position: relative; right: auto; bottom: auto; margin: -50px auto 0; padding: 30px; }
-            .ceo-container { flex-direction: column; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-        }
+        @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } .main-menu { display: none; } }
     </style>
 </head>
 <body>
 
-    <header id="mainHeader">
+    <header id="navbar">
         <div class="header-left">
             <div class="logo">
-                <img src="https://ecogproducts.com/wp-content/uploads/2022/10/Logo-1.png" alt="Ecog Logo">
+                <img src="https://ecogproducts.com/wp-content/uploads/2022/10/Logo-1.png" alt="Logo">
             </div>
         </div>
-        <nav class="main-menu center-menu">
+        <nav class="main-menu">
             <a href="#">Home</a>
             <a href="#">Products</a>
             <a href="#">About Us</a>
@@ -249,10 +141,7 @@
             <a href="#">Contact Us</a>
         </nav>
         <div class="header-actions">
-            <div class="search-wrapper">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" placeholder="Search..." class="search-input">
-            </div>
+            <i class="fa-solid fa-magnifying-glass"></i>
             <i class="fa-solid fa-globe"></i>
             <i class="fa-solid fa-cart-shopping"></i>
             <div class="auth-links">
@@ -262,55 +151,122 @@
         </div>
     </header>
 
-    <div id="listing-view">
-        <section class="hero-banner">
-            <div class="hero-inner">
-                <div class="hero-badge">Ecog Group</div>
-                <h1>Group Leadership</h1>
-                <div class="hero-description">
-                    <p>Information and profiles of the Board of Directors and Senior Leadership driving Ecog's natural innovation globally.</p>
-                </div>
+    <section class="hero-section">
+        <div data-aos="fade-right" data-aos-duration="1200">
+            <div class="tag-box">EcoG Products</div>
+            <h1 class="hero-title">Sustainability</h1>
+            <div class="hero-desc-wrapper">
+                <p class="hero-desc">
+                    Information and profiles regarding our ecological goals, 
+                    environmental impact reports, and the sustainable vision 
+                    of the leadership team at EcoG Products.
+                </p>
             </div>
-        </section>
-
-        <section class="ceo-section">
-            <div class="ceo-container">
-                <div class="ceo-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1200" alt="CEO Ragupathi" class="ceo-portrait">
-                </div>
-                <div class="ceo-info-card">
-                    <h2 class="ceo-name">Ragupathi</h2>
-                    <div class="ceo-details">
-                        <p class="ceo-bio-preview">Lead Architect and Visionary behind Ecog's digital ecosystem, focusing on sustainable technology and user-centric innovation.</p>
-                        <a class="ceo-full-profile-btn" onclick="openProfile(1)">Full Profile <span>→</span></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="grid-section">
-            <div class="section-header">
-                <span>The Visionaries</span>
-                <h2>Board of Directors</h2>
-            </div>
-            <div class="team-grid" id="boardGrid"></div>
         </div>
-    </div>
+        
+        <div class="scroll-indicator text-white/50 text-xl">
+            <i class="fa-solid fa-chevron-down"></i>
+            <i class="fa-solid fa-chevron-down -mt-3"></i>
+            <i class="fa-solid fa-chevron-down -mt-3"></i>
+        </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-6 -mt-20 relative z-10">
+        <div class="bg-white rounded-2xl shadow-2xl p-10 flex flex-col md:flex-row items-center gap-12" data-aos="zoom-in">
+            <div class="flex-1 italic text-2xl text-gray-700 leading-relaxed border-l-8 border-green-600 pl-8">
+                "Our guiding purpose is prosperity for all people and prosperity for our planet."
+                <div class="mt-8 not-italic">
+                    <h4 class="font-bold text-xl text-black">N. Ragupathi</h4>
+                    <p class="text-sm text-gray-500 uppercase tracking-wider">Founder Of Ecog Products</p>
+                </div>
+            </div>
+            <div class="w-72 h-72 bg-gray-200 rounded-2xl overflow-hidden shadow-lg border-4 border-white">
+                <img src="/daae16e9c70661b3d1613c121503230cbe40c8d2.jpg" class="w-full h-full object-cover">
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 max-w-6xl mx-auto px-6 text-center">
+        <h2 class="text-4xl font-bold mb-4" data-aos="fade-up">Securing our Shared Future on this Planet</h2>
+        <p class="text-green-600 font-semibold mb-16 text-lg" data-aos="fade-up">Transitioning India into an Ecological Civilization</p>
+        
+        <div class="relative h-[550px] rounded-3xl overflow-hidden shadow-2xl" data-aos="fade-up">
+            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover">
+            <div class="absolute inset-0 flex items-center justify-start p-6 md:p-20">
+                <div class="bg-green-700/90 backdrop-blur-md p-10 text-white max-w-xl text-left rounded-2xl shadow-2xl">
+                    <p class="leading-loose text-lg">
+                        The world is entering a new energy era. The age of fossil fuels cannot continue much longer. We realize that it is not enough to be carbon neutral. The world needs to achieve absolute emissions reductions as soon as possible.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 px-4 max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-2 group" data-aos="fade-up" data-aos-delay="100">
+            <div class="h-48 bg-gray-200 overflow-hidden">
+                <img src="/2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            </div>
+            <div class="p-6 text-center bg-green-50">
+                <h3 class="font-bold text-lg mb-2">Sustainable Innovation</h3>
+                <p class="text-sm text-gray-600 mb-4">Pioneering technology working in harmony with nature.</p>
+                <button class="px-6 py-2 bg-white border border-green-600 text-green-700 text-sm font-bold rounded-full hover:bg-green-600 hover:text-white transition">View More</button>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-2 group" data-aos="fade-up" data-aos-delay="200">
+            <div class="h-48 bg-gray-200 overflow-hidden">
+                <img src="/1.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            </div>
+            <div class="p-6 text-center bg-green-50">
+                <h3 class="font-bold text-lg mb-2">Nurturing Nature</h3>
+                <p class="text-sm text-gray-600 mb-4">Caring for the soil today to grow a sustainable tomorrow.</p>
+                <button class="px-6 py-2 bg-white border border-green-600 text-green-700 text-sm font-bold rounded-full hover:bg-green-600 hover:text-white transition">View More</button>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-2 group" data-aos="fade-up" data-aos-delay="300">
+            <div class="h-48 bg-gray-200 overflow-hidden">
+                <img src="/3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            </div>
+            <div class="p-6 text-center bg-green-50">
+                <h3 class="font-bold text-lg mb-2">The Future Is Green</h3>
+                <p class="text-sm text-gray-600 mb-4">Products designed to reduce waste and restore the planet.</p>
+                <button class="px-6 py-2 bg-white border border-green-600 text-green-700 text-sm font-bold rounded-full hover:bg-green-600 hover:text-white transition">View More</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-green-500 py-12 px-8 flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto rounded-2xl my-12 text-white" data-aos="fade-up">
+        <h2 class="text-3xl font-bold mb-4 md:mb-0">Sustainability Reports</h2>
+        <button class="px-8 py-3 bg-white text-green-600 font-bold rounded shadow-lg hover:bg-gray-100 transition">View More</button>
+    </section>
+
+    <section class="py-20 px-4">
+        <div class="max-w-3xl mx-auto bg-gray-100 p-10 rounded-[3rem] text-center shadow-inner" data-aos="zoom-in">
+            <h2 class="text-3xl font-bold mb-2">Quick Contact Our Team</h2>
+            <p class="text-gray-500 mb-8">24/7 Support</p>
+            <div class="flex flex-col md:flex-row gap-0 overflow-hidden rounded-full border-2 border-gray-200 bg-white">
+                <input type="text" placeholder="Enter your Phone Number or mail id" class="flex-1 px-8 py-4 outline-none">
+                <button class="bg-black text-white px-10 py-4 font-bold hover:bg-gray-800 transition">Submit</button>
+            </div>
+        </div>
+    </section>
+
+              
+         
+          
+          
 
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="logo-wrap">
-                        <img src="https://ecogproducts.com/wp-content/uploads/2022/10/Logo-1.png" alt="EcoG Logo">
-                    </div>
+                    <img src="https://ecogproducts.com/wp-content/uploads/2022/10/Logo-1.png" alt="EcoG Logo">
                     <p>EcoG delivers sustainable products, intelligent solutions, and responsible innovation to build a greener future.</p>
                     <div class="footer-social">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-x-twitter"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div>
@@ -325,8 +281,8 @@
                     <h4>Who We Are</h4>
                     <ul>
                         <li><a href="#">About Us</a></li>
-                        <li><a href="#">Team</a></li>
                         <li><a href="#">Sustainability</a></li>
+                        <li><a href="#">Careers</a></li>
                     </ul>
                 </div>
                 <div>
@@ -334,7 +290,7 @@
                     <ul>
                         <li><a href="#">Contact Us</a></li>
                         <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
                     </ul>
                 </div>
             </div>
@@ -344,67 +300,20 @@
             </div>
         </div>
     </footer>
+    
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Header Scroll Listener
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('mainHeader');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
+        AOS.init({ duration: 1000, once: true });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
             } else {
-                header.classList.remove('scrolled');
+                nav.classList.remove('scrolled');
             }
         });
-
-        // Team and Profile Logic (Keep your existing script here)
-        const teamData = [
-            {
-                id: 1,
-                name: "Ragupathi",
-                role: "Executive Chairman & CEO",
-                img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800",
-                bio: "<p>Ragupathi oversees global operations and strategic growth at Ecog. He pioneered the 'Nature-Digital Synergy' model.</p>",
-                quote: "Innovation is only valuable when it respects the environment it serves.",
-                stack: { "Leadership": ["Strategy", "Sustainability"] }
-            },
-            {
-                id: 2,
-                name: "Mathankumar R",
-                role: "Full Stack Developer & IT Advisor",
-                img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800",
-                bio: "<p>Mathankumar is a multidisciplinary technologist focusing on user-centric digital solutions.</p>",
-                quote: "To bridge innovative design with cutting-edge technology.",
-                stack: { "Tech": ["React", "Python", "AI"] }
-            },
-            {
-                id: 3,
-                name: "Gokul R",
-                role: "JR Full Stack Developer",
-                img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800",
-                bio: "<p>Driving front-end excellence and modern UI patterns.</p>",
-                quote: "Clean code is the foundation of a sustainable digital world.",
-                stack: { "Dev": ["JavaScript", "CSS", "Node"] }
-            }
-        ];
-
-        function createCards() {
-            const grid = document.getElementById('boardGrid');
-            teamData.forEach(member => {
-                const card = document.createElement('div');
-                card.className = 'member-card';
-                card.onclick = () => openProfile(member.id);
-                card.innerHTML = `
-                    <div class="img-container"><img src="${member.img}" class="member-image"></div>
-                    <div class="member-info">
-                        <h4>${member.name}</h4>
-                        <p>${member.role}</p>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        window.onload = createCards;
     </script>
 </body>
 </html>
